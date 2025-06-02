@@ -67,8 +67,8 @@ workflows:
       #     echo "App Bundle built at build/app/outputs/bundle/release/app-release.aab"
       # - name: Build Flutter iOS (requires code signing setup in Codemagic)
       #   script: |
-      #     flutter build ios --release --no-codesign # Remove --no-codesign for actual archive builds
-      #     echo "iOS app built (check Codemagic artifacts for .ipa)"
+      #     flutter build ios --release --no-codesign # iPad only app. Remove --no-codesign for actual archive builds
+      #     echo "iOS (iPad only) app built (check Codemagic artifacts for .ipa)"
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk
       # - build/app/outputs/bundle/release/*.aab
