@@ -1,0 +1,82 @@
+# Project Overview: 수학 노트 앱 (Math Note App)
+#
+# 1.1 앱 소개
+#   이름: 수학 노트 앱
+#   목적: 수학 공식과 수식을 쉽게 기록하고 관리할 수 있는 iOS 앱 (and Android via Flutter)
+#   주요 기능:
+#     - LaTeX 수식 렌더링
+#     - 폴더 구조 관리
+#     - Google Drive 백업
+#     - 다크/라이트 모드
+#
+# 1.2 기술 스택
+#   프레임워크: Flutter
+#   주요 패키지:
+#     - flutter_math_fork: 수식 렌더링
+#     - shared_preferences: 로컬 저장소
+#     - provider: 상태 관리
+#     - google_sign_in: Google 인증
+#     - googleapis: Google Drive API
+#
+# 2. 프로젝트 구조 (간략)
+#   lib/
+#     models/ (note.dart, folder.dart)
+#     screens/ (home_screen.dart, note_detail_screen.dart, folder_screen.dart)
+#     services/ (google_auth_service.dart, google_drive_service.dart)
+#     providers/ (note_viewmodel.dart, folder_viewmodel.dart)
+#     main.dart
+#
+# (상세 내용은 프로젝트 문서를 참고)
+
+workflows:
+  flutter-main-workflow: # Workflow for the main branch
+    name: Flutter Main CI/CD
+    instance_type: mac_mini_m1 # For iOS and Android builds
+    max_build_duration: 60 # minutes
+    environment:
+      flutter: stable # Use the stable channel of Flutter
+      # cocoapods_version: default # Ensure CocoaPods is available
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main # Trigger for pushes to the main branch
+          include: true
+      cancel_previous_builds: true
+    scripts:
+      - name: Set up Flutter version
+        script: |
+          flutter --version
+          flutter doctor
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Analyze project source code
+        script: |
+          flutter analyze lib test
+      - name: Run Flutter tests
+        script: |
+          flutter test --coverage
+      - name: Build Flutter Android (APK)
+        script: |
+          flutter build apk --release
+          echo "APK built at build/app/outputs/flutter-apk/app-release.apk"
+      # - name: Build Flutter Android (App Bundle)
+      #   script: |
+      #     flutter build appbundle --release
+      #     echo "App Bundle built at build/app/outputs/bundle/release/app-release.aab"
+      # - name: Build Flutter iOS (requires code signing setup in Codemagic)
+      #   script: |
+      #     flutter build ios --release --no-codesign # Remove --no-codesign for actual archive builds
+      #     echo "iOS app built (check Codemagic artifacts for .ipa)"
+    artifacts:
+      - build/app/outputs/flutter-apk/app-release.apk
+      # - build/app/outputs/bundle/release/*.aab
+      # - $CM_IPA_PATH # Default path for iOS .ipa files
+    publishing:
+      email:
+         recipients:
+           - hjy10727@gmail.com # Git log에서 확인된 사용자 이메일
+         notify:
+           success: true
+           failure: false # 실패 시에는 보통 CI/CD 플랫폼 자체 알림을 확인 
