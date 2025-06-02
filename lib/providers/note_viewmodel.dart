@@ -40,11 +40,13 @@ class NoteViewModel extends ChangeNotifier {
     required String title,
     required String content,
     String? folderId,
+    List<Map<String, dynamic>>? drawings,
   }) {
     final newNote = Note(
       id: Random().nextInt(100000).toString(), // 임시 ID
       title: title,
       content: content,
+      drawings: drawings,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
       folderId: folderId, // 폴더 ID 설정

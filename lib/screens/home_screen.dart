@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:math_note_app/models/folder.dart';
 import 'package:math_note_app/providers/folder_viewmodel.dart';
 import 'package:math_note_app/screens/note_detail_screen.dart';
 import 'package:math_note_app/screens/folder_screen.dart';
